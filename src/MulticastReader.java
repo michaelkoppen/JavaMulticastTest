@@ -11,13 +11,17 @@ public class MulticastReader {
         socket.joinGroup(address);
 
         byte[] messageBuffer = new byte[1024];
-        DatagramPacket receivePacket = new DatagramPacket(messageBuffer, 1024);
+        while (true) {
+            DatagramPacket receivePacket = new DatagramPacket(messageBuffer, 1024);
 
-        socket.receive(receivePacket);
+            socket.receive(receivePacket);
 
-        String resultStr = new String(messageBuffer);
-        System.out.println(resultStr);
-
+            String resultStr = new String(messageBuffer);
+            if (resultStr.equals("Q") || resultStr.equals("q")) {
+                break;
+            }
+            System.out.println(resultStr);
+        }
         socket.leaveGroup(address);
         socket.close();
     }
